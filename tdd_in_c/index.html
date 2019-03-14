@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="lib/css/screen.css">
 
         <!-- Theme used for syntax highlighting of code -->
-        <link rel="stylesheet" href="lib/css/zenburn.css">
+        <link rel="stylesheet" href="lib/css/monokai-sublime.css">
 
         <!-- Printing and PDF exports -->
         <script>
@@ -27,13 +27,28 @@
         <div class="reveal">
             <div class="slides">
                 <section id="title" data-background-image="lib/images/piano.jpg" data-background-opacity="0.1">
-                    <h1>TDD in C</h1>
-                    <h2>(yes, C)</h2>
+                    <h1>Test-Driven Development</h1>
+                    <h2>(in C)</h2>
                     <p><small>by Andrew Fricke</small></p>
                 </section>
 
                 <section>
-                    <h2>Preface: test-driven development is just a tool</h2>
+                    <h2><span class="lowlight">My <span class="highlight">goal</span> is to</span> change your perspective <span class="lowlight">on something</span></h2>
+                </section>
+
+                <section>
+                    <h2 class="highlight">WARNING</h2>
+                    <h3>(I'm not an expert)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Overview</h2>
+                    <ul>
+                        <li class="fragment">What <span class="lowlight">is it</span></li>
+                        <li class="fragment">Where <span class="lowlight">I started</span></li>
+                        <li class="fragment">Why <span class="lowlight">I avoided it</span></li>
+                        <li class="fragment">What <span class="lowlight">I learned</span></li>
+                    </ul>
                 </section>
 
                 <section>
@@ -41,11 +56,63 @@
                 </section>
 
                 <section>
-                    <h2>Red, Green, Refactor</h2>
+                    <h2>Vocab</h2>
                 </section>
 
                 <section>
-                    <h2>Vocab</h2>
+                    <h2>There are different types of testing</h2>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Unit testing</h2>
+                    <h3>(smallest testable part of an application)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Integration testing</h2>
+                    <h3>(interaction between components)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">System testing</h2>
+                    <h3>(testing the system as a whole)</h3>
+                </section>
+
+                <section>
+                    <h2>TDD is largely focused on unit testing</h2>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Harness</h2>
+                    <h3>(the framework for writing tests)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Fixture</h2>
+                    <h3>(means of configuration enabling the repeatability of tests)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Case</h2>
+                    <h3>(a single test)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">TDD cycle</h2>
+                    <ul>
+                        <li class="fragment"><span class="highlight">Red</span> Enforces a specification</li>
+                        <li class="fragment"><span class="highlight">Green</span> Implementation meets the specification</li>
+                        <li class="fragment"><span class="highlight">Refactor</span> Improve the implementation</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Recapping</h2>
+                    <ul>
+                        <li class="fragment"><span class="lowlight">Types of testing:</span> unit, integration, system</li>
+                        <li class="fragment"><span class="lowlight">Unit tests consist of:</span> harness, fixtures, cases</li>
+                        <li class="fragment"><span class="lowlight">Development cycle of:</span> red, green, refactor</li>
+                    </ul>
                 </section>
 
                 <section>
@@ -53,7 +120,94 @@
                 </section>
 
                 <section>
+                    <pre><code class="hljs" data-trim contenteditable>
+├── bin
+├── build
+├── CMakeLists.txt
+├── src
+│   ├── CMakeLists.txt
+│   ├── dictionary.c
+│   ├── dictionary.h
+├── test
+│   ├── CMakeLists.txt
+│   ├── test_dictionary.c
+└── vendor
+    ├── CMakeLists.txt
+    ├── cmock
+    └── unity</code></pre>
+                </section>
+
+                <section>
+                    <pre><code class="hljs" data-trim contenteditable>
+cmake_minimum_required(VERSION 3.11.2)
+
+project(dictionary)
+
+add_subdirectory(src)
+add_subdirectory(vendor)
+
+include(CTest)
+if(BUILD_TESTING)
+    add_subdirectory(test)
+endif()</code></pre>
+                </section>
+
+                <section>
+                    <pre><code class="hljs" data-trim contenteditable>
+add_library(dictionary SHARED dictionary.c)
+target_compile_options(
+    dictionary PUBLIC
+        -Waggregate-return -Wall -Wextra -Wfloat-equal -Winline
+        -Wpedantic -Wstack-usage=1024 -Wwrite-strings)
+target_include_directories(dictionary PUBLIC ${PROJECT_SOURCE_DIR}/src)
+</code></pre>
+                </section>
+
+                <section>
+                    <pre><code class="hljs" data-trim contenteditable>
+add_executable(test_dictionary test_dictionary.c)
+target_link_libraries(test_dictionary cmock)
+add_test(test_dictionary test_dictionary)</code></pre>
+                </section>
+
+                <section>
+                    <pre><code class="hljs" data-trim contenteditable>
+add_library(unity STATIC unity/unity.c)
+target_include_directories(unity PUBLIC ${PROJECT_SOURCE_DIR}/vendor/unity)
+
+add_library(cmock STATIC cmock/cmock.c)
+target_include_directories(cmock PUBLIC ${PROJECT_SOURCE_DIR}/vendor/cmock)
+target_link_libraries(cmock unity)</code></pre>
+                </section>
+
+                <section>
                     <h2>Unity</h2>
+                </section>
+
+                <section>
+                    <h2>Why I avoided TDD</h2>
+                </section>
+
+                <section>
+                    <h2>Writing tests <em class="highlight">sucks</em></h2>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Why I hated writing tests</h2>
+                    <ul>
+                        <li class="fragment">After the fact for inherited code</li>
+                        <li class="fragment">Lack of experience with large codebases</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Ego</h2>
+                    <p><img width="75%" height="75%" src="lib/images/swordfish.gif"></p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Recapping</h2>
+                    <p>I hated writing tests because of prior experiences</p>
                 </section>
 
                 <section>

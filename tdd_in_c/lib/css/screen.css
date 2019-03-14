@@ -15,8 +15,9 @@ h3 {
     font-size: 1.2em !important;
 }
 
-.slides section img {
-    border-color: #6DC2B2;
+.slides section img,
+.slides section pre {
+    border: 4px solid #6DC2B2;
 }
 
 .slides section img.top {
