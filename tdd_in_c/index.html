@@ -83,8 +83,8 @@
                 </section>
 
                 <section>
-                    <h2 class="highlight">Harness</h2>
-                    <h3>(the framework for writing tests)</h3>
+                    <h2 class="highlight">Case</h2>
+                    <h3>(a single test)</h3>
                 </section>
 
                 <section>
@@ -93,8 +93,8 @@
                 </section>
 
                 <section>
-                    <h2 class="highlight">Case</h2>
-                    <h3>(a single test)</h3>
+                    <h2 class="highlight">Harness</h2>
+                    <h3>(the framework for writing tests)</h3>
                 </section>
 
                 <section>
@@ -110,16 +110,45 @@
                     <h2 class="highlight">Recapping</h2>
                     <ul>
                         <li class="fragment"><span class="lowlight">Types of testing:</span> unit, integration, system</li>
-                        <li class="fragment"><span class="lowlight">Unit tests consist of:</span> harness, fixtures, cases</li>
+                        <li class="fragment"><span class="lowlight">Unit tests consist of:</span> cases, fixtures, harness</li>
                         <li class="fragment"><span class="lowlight">Development cycle of:</span> red, green, refactor</li>
                     </ul>
                 </section>
 
                 <section>
-                    <h2>CMake</h2>
+                    <h2>Where I started</h2>
                 </section>
 
                 <section>
+                    <h2 class="highlight">Unity</h2>
+                    <h3>(not the game engine, simple C test framework)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Why Unity?</h2>
+                    <h3>(I felt weird using a C++ test framework for C code)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">CMake</h2>
+                    <h3>(make, but more?)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Why CMake</h2>
+                    <ul>
+                        <li class="fragment">Easier to configure</li>
+                        <li class="fragment">Better at handling more complex dependency trees</li>
+                        <li class="fragment">Out of source builds</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>A quick example</h2>
+                </section>
+
+                <section>
+                    <h2>Directory structure</h2>
                     <pre><code class="hljs" data-trim contenteditable>
 ├── bin
 ├── build
@@ -138,7 +167,8 @@
                 </section>
 
                 <section>
-                    <pre><code class="hljs" data-trim contenteditable>
+                    <h2>./CMakeLists.txt</h2>
+                    <pre class="cmake"><code class="hljs" data-trim contenteditable>
 cmake_minimum_required(VERSION 3.11.2)
 
 project(dictionary)
@@ -153,35 +183,71 @@ endif()</code></pre>
                 </section>
 
                 <section>
-                    <pre><code class="hljs" data-trim contenteditable>
+                    <h2>./src/CMakeLists.txt</h2>
+                    <pre class="cmake"><code class="hljs" data-trim contenteditable>
 add_library(dictionary SHARED dictionary.c)
 target_compile_options(
     dictionary PUBLIC
-        -Waggregate-return -Wall -Wextra -Wfloat-equal -Winline
-        -Wpedantic -Wstack-usage=1024 -Wwrite-strings)
-target_include_directories(dictionary PUBLIC ${PROJECT_SOURCE_DIR}/src)
+        -Waggregate-return -Wall -Wextra
+        -Wfloat-equal -Winline -Wpedantic
+        -Wstack-usage=1024 -Wwrite-strings)
+target_include_directories(dictionary PUBLIC
+    ${PROJECT_SOURCE_DIR}/src)
 </code></pre>
                 </section>
 
                 <section>
-                    <pre><code class="hljs" data-trim contenteditable>
+                    <h2>./test/CMakeLists.txt</h2>
+                    <pre class="cmake"><code class="hljs" data-trim contenteditable>
 add_executable(test_dictionary test_dictionary.c)
 target_link_libraries(test_dictionary cmock)
 add_test(test_dictionary test_dictionary)</code></pre>
                 </section>
 
                 <section>
-                    <pre><code class="hljs" data-trim contenteditable>
+                    <h2>./vendor/CMakeLists.txt</h2>
+                    <pre class="cmake"><code class="hljs" data-trim contenteditable>
 add_library(unity STATIC unity/unity.c)
-target_include_directories(unity PUBLIC ${PROJECT_SOURCE_DIR}/vendor/unity)
+target_include_directories(unity PUBLIC
+    ${PROJECT_SOURCE_DIR}/vendor/unity)
 
 add_library(cmock STATIC cmock/cmock.c)
-target_include_directories(cmock PUBLIC ${PROJECT_SOURCE_DIR}/vendor/cmock)
+target_include_directories(cmock PUBLIC
+    ${PROJECT_SOURCE_DIR}/vendor/cmock)
 target_link_libraries(cmock unity)</code></pre>
                 </section>
 
                 <section>
-                    <h2>Unity</h2>
+                    <h2>./test/test_dictionary.c</h2>
+                    <pre class="c"><code class="hljs" data-trim contenteditable>
+#include "unity.h"
+#include "dictionary.h"
+
+void setUp(void) {}
+void tearDown(void) {}</code></pre>
+                </section>
+
+                <section>
+                    <h2>./test/test_dictionary.c</h2>
+                    <pre class="c"><code class="hljs" data-trim contenteditable>
+void test_dictionary_create(void) {
+    struct dictionary *d;
+
+    d = dictionary_create(16);
+    TEST_ASSERT_EQUAL(0, d-&gt;length);
+    TEST_ASSERT_EQUAL(16, d-&gt;capacity);
+
+    d = dictionary_destroy(d);
+    TEST_ASSERT_NULL(d);
+}</code></pre>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Recapping</h2>
+                    <ul>
+                        <li class="fragment"><span class="lowlight">Unity:</span> I wanted a C test framework for testing C</li>
+                        <li class="fragment"><span class="lowlight">CMake:</span> I found it easier than vanilla make</li>
+                    </ul>
                 </section>
 
                 <section>
@@ -215,350 +281,25 @@ target_link_libraries(cmock unity)</code></pre>
                 </section>
 
                 <section>
-                    <h2></h2>
-                </section>
-
-                <section>
-                    <h2></h2>
-                </section>
-
-                <section>
-                    <h2></h2>
-                </section>
-
-                <section>
-                    <h2></h2>
-                </section>
-
-                <section>
-                    <h2></h2>
-                </section>
-
-                <section>
-                    <h2>Generic scenario</h2>
-                    <p class="left">
-                        <span class="fragment"><strong>HUMAN</strong> asks <strong>MACHINE</strong> what's this an image of?</span><br>
-                        <span class="fragment"><strong>MACHINE</strong> <img class="top" src="lib/images/math.gif"></span><br>
-                        <span class="fragment"><strong>MACHINE</strong> tells <strong>HUMAN</strong> it's a cat</span>
-                    </p>
-                </section>
-
-                <section>
-                    <h2>What could go wrong...</h2>
-                    <p><img src="lib/images/parkour.gif"></p>
-                </section>
-
-                <section>
-                    <h2>Oops...</h2>
-                    <p><img src="lib/images/terminator.gif"></p>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Overview</h2>
+                    <h2 class="highlight">Writing tests first</h2>
                     <ul>
-                        <li class="fragment">What <span class="lowlight">is it</span></li>
-                        <li class="fragment">How <span class="lowlight">does it work</span></li>
-                        <li class="fragment">Where <span class="lowlight">is it used</span></li>
-                        <li class="fragment">Where <span class="lowlight">do I start</span></li>
+                        <li class="fragment">Far less annoying</li>
+                        <li class="fragment">Less time wasted manually testing after changes</li>
+                        <li class="fragment">More bugs caught<span class="highlight">*</span></li>
+                        <li class="fragment"><strong>Leads to a better engineered product overall</strong></li>
                     </ul>
                 </section>
 
                 <section>
-                    <h2>What is machine learning?</h2>
-                </section>
-
-                <section>
-                    <h2>Pattern recognition</h2>
-                </section>
-
-                <section>
-                    <h2>Decision making without explicit instruction</h2>
-                </section>
-
-                <section>
-                    <h2>Where does machine learning fit in computer science?</h2>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Computer science</h2>
-                    <h3>(computer theory and design)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Artificial intelligence</h2>
-                    <h3>(machine intelligence that mimics human intelligence)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Machine learning</h2>
-                    <h3>(a goal required for achieving artificial intelligence)</h3>
-                </section>
-
-                <section>
-                    <h2>There are many goals of artificial intelligence...</h2>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Computer vision</h2>
-                    <h3>(that blob of pixels is a cat)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Natural language processing</h2>
-                    <h3>(auto-correct, predictive text, etc.)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Robotics</h2>
-                    <p><img src="lib/images/backflip.gif"></p>
-                </section>
-
-                <section>
-                    <h2>and others...</h2>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Recapping</h2>
+                    <h2 class="highlight">Caveats</h2>
                     <ul>
-                        <li class="fragment">We make machine learn good with math</li>
-                        <li class="fragment">We want to make machine quack like human</li>
-                        <li class="fragment">Someone saw Terminator and said hold my beer</li>
-                        <li class="fragment">No wait, I mean science, the computer kind</li>
+                        <li class="fragment">Test quality significantly impacts effectiveness</li>
+                        <li class="fragment">A tough balance that only comes with experience</li>
                     </ul>
                 </section>
 
                 <section>
-                    <h2>But machine learning how?</h2>
-                </section>
-
-                <section>
-                    <h2>More vocab</h2>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Features</h2>
-                    <h3>(measurable characteristics of your input)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Labels</h2>
-                    <h3>(a desired output for a given input)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">An example!</h2>
-                </section>
-
-                <section>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th colspan="4">Features</th>
-                            </tr>
-
-                            <tr>
-                                <th class="highlight">IP</th>
-                                <th class="highlight">Port</th>
-                                <th class="highlight">Protocol</th>
-                                <th class="highlight">Size</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td>1.2.3.4</td>
-                                <td>80</td>
-                                <td>TCP</td>
-                                <td>1000</td>
-                            </tr>
-
-                            <tr>
-                                <td>5.6.7.8</td>
-                                <td>4444</td>
-                                <td>UDP</td>
-                                <td>50</td>
-                            </tr>
-
-                            <tr>
-                                <td>8.8.8.8</td>
-                                <td>42364</td>
-                                <td>UDP</td>
-                                <td>200</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <section>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>&nbsp;</th>
-                                <th class="lowlight" colspan="4">Features</th>
-                            </tr>
-
-                            <tr>
-                                <th>Labels</th>
-                                <th class="lowlight">IP</th>
-                                <th class="lowlight">Port</th>
-                                <th class="lowlight">Protocol</th>
-                                <th class="lowlight">Size</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td class="highlight">HTTP</td>
-                                <td>1.2.3.4</td>
-                                <td>80</td>
-                                <td>TCP</td>
-                                <td>1000</td>
-                            </tr>
-
-                            <tr>
-                                <td class="highlight">?</td>
-                                <td>5.6.7.8</td>
-                                <td>4444</td>
-                                <td>UDP</td>
-                                <td>50</td>
-                            </tr>
-
-                            <tr>
-                                <td class="highlight">DNS</td>
-                                <td>8.8.8.8</td>
-                                <td>42364</td>
-                                <td>UDP</td>
-                                <td>200</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <section>
-                    <h2>Back to vocab</h2>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Algorithm</h2>
-                    <h3>(recipe for solving a problem)</h3>
-                </section>
-
-                <section>
-                    <h2>In our case, interpret data unassisted <em class="lowlight">(mostly)</em></h2>
-                </section>
-
-                <section>
-                    <h2>Two ways to group machine learning algorithms</h2>
-                </section>
-
-                <section>
-                    <h2 class="highlight">How they learn</h2>
-                    <h3>(how facts are determined from input)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">How they function</h2>
-                    <h3>(how decisions are made based on those facts)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Ways they learn</h2>
-                    <h3>(there are a few)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Supervised</h2>
-                    <h3>(initial set of data is labeled)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Unsupervised</h2>
-                    <h3>(data is unlabeled and facts are deduced from patterns)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Reinforcement</h2>
-                    <h3>(data is unlabeled and decisions are made based on rewards)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Ways they function</h2>
-                    <h3>(there are <strong>a lot</strong>)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Clustering</h2>
-                    <h3>(organizing input based on observed patterns)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Instanced-based</h2>
-                    <h3>(compares to previous output)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Artificial neural networks</h2>
-                    <h3>(simulates neurons in the brain)</h3>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Recapping</h2>
-                    <ul>
-                        <li class="fragment">Algorithms are the core of how machines learn</li>
-                        <li class="fragment">They are categorized by how they learn and function</li>
-                        <li class="fragment">They operate on features and/or labels</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>But real world machine learning?</h2>
-                </section>
-
-                <section>
-                    <h2>Let's start with ordinary</h2>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Colorizing old images</h2>
-                    <h3>(github.com/jantic/DeOldify)</h3>
-                    <p><img src="lib/images/paris.jpg"></p>
-                </section>
-
-                <section>
-                    <h2>A little crazier?</h2>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Real time face recognition?</h2>
-                    <h3>(github.com/ageitget/face_recognition)</h3>
-                    <p><img src="lib/images/face_recognition.gif"></p>
-                </section>
-
-                <section>
-                    <h2>So there's this video game...</h2>
-                </section>
-
-                <section>
-                    <h2 class="highlight">A team of AI beating professionals at video games?</h2>
-                    <h3>(openai.com/five/)</h3>
-                    <p><img src="lib/images/openai.jpg"></p>
-                </section>
-
-                <section>
-                    <h2>I can make a bot to beat people at video games?</h2>
-                </section>
-
-                <section>
-                    <h2>Yes<span class="fragment">... maybe</span></h2>
-                </section>
-
-                <section>
-                    <h2 class="highlight">Where do I start?</h2>
-                    <ul>
-                        <li class="fragment">Stanford's CS229 and CS231n</li>
-                        <li class="fragment">coursera.org/learn/machine-learning</li>
-                        <li class="fragment">fast.ai</li>
-                    </ul>
+                    <h2>Questions?</h2>
                 </section>
             </div>
         </div>
