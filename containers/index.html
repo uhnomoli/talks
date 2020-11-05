@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="dist/reset.css">
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/serif.css" id="theme">
+        <link rel="stylesheet" href="plugin/highlight/zenburn.css" id="highlight-theme">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+        <link rel="stylesheet" href="dist/screen.css">
+
+        <title>Containers (a world beyond Docker)</title>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section id="title" data-background-image="dist/images/containers.jpg" data-background-opacity="0.1">
+                    <h1>Containers</h1>
+                    <h2>(a world beyond Docker)</h2>
+                    <p><small><em>by Andrew Fricke</em></small></p>
+                </section>
+
+                <!--
+                - agenda
+                - container vs vms
+                - overview diagram
+                - terminology
+                - OCI
+                - security
+                - use cases (good and bad)
+                - best practices
+                - brief cloud overview
+                -->
+
+                <section>
+                    <h2><span class="lowlight">My <span class="highlight">goal</span> is to</span> demystify containers <span class="lowlight">and related technologies</span></h2>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Overview</h2>
+                    <ul>
+                        <li class="fragment">What <span class="lowlight">are containers</span></li>
+                        <li class="fragment">How <span class="lowlight">to use them</span></li>
+                        <li class="fragment">&hellip;</li>
+                        <li class="fragment"><em>What <span class="lowlight">is the cloud</span></em></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2><em>Wait, <span class="lowlight">the cloud</span>?</em></h2>
+                    <p><img width="75%" height="75%" src="dist/images/the_internet.gif"></p>
+                </section>
+
+                <!--
+                <section>
+                    <h2></h2>
+                </section>
+                -->
+
+                <section>
+                    <h2 class="highlight">What is a container?</h2>
+                    <h3>(operating system-level virtualization)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Types of virtualization</h2>
+                    <ul>
+                        <li class="fragment">Hardware: <span class="lowlight">Hyper-V, KVM, VMWare ESXi</span></li>
+                        <li class="fragment">Operating system<span class="highlight">*</span>: <span class="lowlight">FreeBSD jail, LXC</span></li>
+                        <li class="fragment">Application<span class="highlight">*</span>: <span class="lowlight">Docker, rkt</span></li>
+                    </ul>
+                    <p class="fragment lowlight"><em><span class="highlight">*</span>(&ldquo;container&rdquo; usually means one of these)</em></p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Hardware</h2>
+                    <p><img width="75%" height="75%" src="dist/images/hardware.png"></p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Operating system</h2>
+                    <p><img width="75%" height="75%" src="dist/images/operating_system.png"></p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Application</h2>
+                    <p><img width="75%" height="75%" src="dist/images/application.png"></p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Vocabulary</h2>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Image</h2>
+                    <h3>(collection of image layers and metadata)</h3>
+                    <p class="fragment lowlight">(like a <span class="highlight">ZIP</span> file or an object <span class="highlight">class</span> in object-oriented programming)</p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Layer</h2>
+                    <h3>(the difference between commands ran to build an image)</h3>
+                    <p class="fragment lowlight">(like a Git <span class="highlight">commit</span>)</p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Tag</h2>
+                    <h3>(a label for a specific layer that is meant to be used)</h3>
+                    <p class="fragment lowlight">(like a Git <span class="highlight">tag</span>)</p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Container</h2>
+                    <h3>(an instance of an image)</h3>
+                    <p class="fragment lowlight">(like an object <span class="highlight">instance</span> in object-oriented programming)</p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Registry</h2>
+                    <h3>(a server that provides access to images)</h3>
+                    <p class="fragment lowlight">(like a Git <span class="highlight">server</span> <em>(e.g. GitHub, GitLab, etc.)</em>)</p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Container engine</h2>
+                    <h3>(operating system-level virtualization)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Container runtime</h2>
+                    <h3>(operating system-level virtualization)</h3>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Container orchestration</h2>
+                    <h3>(operating system-level virtualization)</h3>
+                </section>
+
+                <section>
+                    <h2>Questions?</h2>
+                </section>
+            </div>
+        </div>
+
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
+        <script>
+            Reveal.initialize({
+                hash: true,
+                plugins: [
+                    RevealHighlight,
+                    RevealMarkdown,
+                    RevealNotes],
+                transition: 'none'});
+        </script>
+    </body>
+</html>
+
