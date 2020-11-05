@@ -4,29 +4,20 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+        <link rel="stylesheet" href="dist/reset.css">
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/black.css" id="theme">
+        <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+        <link rel="stylesheet" href="dist/screen.css">
+
         <title>Test Driven Development in C</title>
-
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
-        <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/black.css">
-        <link rel="stylesheet" href="lib/css/screen.css">
-
-        <!-- Theme used for syntax highlighting of code -->
-        <link rel="stylesheet" href="lib/css/monokai-sublime.css">
-
-        <!-- Printing and PDF exports -->
-        <script>
-            var link = document.createElement( 'link' );
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-            document.getElementsByTagName( 'head' )[0].appendChild( link );
-        </script>
     </head>
     <body>
         <div class="reveal">
             <div class="slides">
-                <section id="title" data-background-image="lib/images/piano.jpg" data-background-opacity="0.1">
+                <section id="title" data-background-image="dist/images/piano.jpg" data-background-opacity="0.1">
                     <h1>Test-Driven Development</h1>
                     <h2>(in C)</h2>
                     <p><small>by Andrew Fricke</small></p>
@@ -268,7 +259,7 @@ void test_dictionary_create(void) {
 
                 <section>
                     <h2>Ego</h2>
-                    <p><img width="75%" height="75%" src="lib/images/swordfish.gif"></p>
+                    <p><img width="75%" height="75%" src="dist/images/swordfish.gif"></p>
                 </section>
 
                 <section>
@@ -304,22 +295,19 @@ void test_dictionary_create(void) {
             </div>
         </div>
 
-        <script src="lib/js/head.min.js"></script>
-        <script src="js/reveal.js"></script>
-
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
         <script>
-            // More info about config & dependencies:
-            // - https://github.com/hakimel/reveal.js#configuration
-            // - https://github.com/hakimel/reveal.js#dependencies
             Reveal.initialize({
-                dependencies: [
-                    { src: 'plugin/markdown/marked.js' },
-                    { src: 'plugin/markdown/markdown.js' },
-                    { src: 'plugin/notes/notes.js', async: true },
-                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-                ],
-                transition: 'none'
-            });
+                hash: true,
+                plugins: [
+                    RevealHighlight,
+                    RevealMarkdown,
+                    RevealNotes],
+                transition: 'none'});
         </script>
     </body>
 </html>
+

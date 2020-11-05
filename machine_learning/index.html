@@ -4,29 +4,20 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+        <link rel="stylesheet" href="dist/reset.css">
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/black.css" id="theme">
+        <link rel="stylesheet" href="plugin/highlight/zenburn.css" id="highlight-theme">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+        <link rel="stylesheet" href="dist/screen.css">
+
         <title>Machine learning - What it is & where to start</title>
-
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
-        <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/black.css">
-        <link rel="stylesheet" href="lib/css/screen.css">
-
-        <!-- Theme used for syntax highlighting of code -->
-        <link rel="stylesheet" href="lib/css/zenburn.css">
-
-        <!-- Printing and PDF exports -->
-        <script>
-            var link = document.createElement( 'link' );
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-            document.getElementsByTagName( 'head' )[0].appendChild( link );
-        </script>
     </head>
     <body>
         <div class="reveal">
             <div class="slides">
-                <section id="title" data-background-image="lib/images/piano.jpg" data-background-opacity="0.1">
+                <section id="title" data-background-image="dist/images/piano.jpg" data-background-opacity="0.1">
                     <h1>Machine Learning</h1>
                     <h2>What is it & where to start</h2>
                     <p><small>by Andrew Fricke</small></p>
@@ -36,19 +27,19 @@
                     <h2>Generic scenario</h2>
                     <p class="left">
                         <span class="fragment"><strong>HUMAN</strong> asks <strong>MACHINE</strong> what's this an image of?</span><br>
-                        <span class="fragment"><strong>MACHINE</strong> <img class="top" src="lib/images/math.gif"></span><br>
+                        <span class="fragment"><strong>MACHINE</strong> <img class="top" src="dist/images/math.gif"></span><br>
                         <span class="fragment"><strong>MACHINE</strong> tells <strong>HUMAN</strong> it's a cat</span>
                     </p>
                 </section>
 
                 <section>
                     <h2>What could go wrong...</h2>
-                    <p><img src="lib/images/parkour.gif"></p>
+                    <p><img src="dist/images/parkour.gif"></p>
                 </section>
 
                 <section>
                     <h2>Oops...</h2>
-                    <p><img src="lib/images/terminator.gif"></p>
+                    <p><img src="dist/images/terminator.gif"></p>
                 </section>
 
                 <section>
@@ -108,7 +99,7 @@
 
                 <section>
                     <h2 class="highlight">Robotics</h2>
-                    <p><img src="lib/images/backflip.gif"></p>
+                    <p><img src="dist/images/backflip.gif"></p>
                 </section>
 
                 <section>
@@ -319,7 +310,7 @@
                 <section>
                     <h2 class="highlight">Colorizing old images</h2>
                     <h3>(github.com/jantic/DeOldify)</h3>
-                    <p><img src="lib/images/paris.jpg"></p>
+                    <p><img src="dist/images/paris.jpg"></p>
                 </section>
 
                 <section>
@@ -329,7 +320,7 @@
                 <section>
                     <h2 class="highlight">Real time face recognition?</h2>
                     <h3>(github.com/ageitget/face_recognition)</h3>
-                    <p><img src="lib/images/face_recognition.gif"></p>
+                    <p><img src="dist/images/face_recognition.gif"></p>
                 </section>
 
                 <section>
@@ -339,7 +330,7 @@
                 <section>
                     <h2 class="highlight">A team of AI beating professionals at video games?</h2>
                     <h3>(openai.com/five/)</h3>
-                    <p><img src="lib/images/openai.jpg"></p>
+                    <p><img src="dist/images/openai.jpg"></p>
                 </section>
 
                 <section>
@@ -361,22 +352,19 @@
             </div>
         </div>
 
-        <script src="lib/js/head.min.js"></script>
-        <script src="js/reveal.js"></script>
-
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
         <script>
-            // More info about config & dependencies:
-            // - https://github.com/hakimel/reveal.js#configuration
-            // - https://github.com/hakimel/reveal.js#dependencies
             Reveal.initialize({
-                dependencies: [
-                    { src: 'plugin/markdown/marked.js' },
-                    { src: 'plugin/markdown/markdown.js' },
-                    { src: 'plugin/notes/notes.js', async: true },
-                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-                ],
-                transition: 'none'
-            });
+                hash: true,
+                plugins: [
+                    RevealHighlight,
+                    RevealMarkdown,
+                    RevealNotes],
+                transition: 'none'});
         </script>
     </body>
 </html>
+
