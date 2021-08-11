@@ -1,0 +1,22 @@
+:root {
+    --r-background-color: #00323f;
+    --r-heading-color: #00706c;
+    --r-hilight-color: #f26241;
+    --r-link-color: #f58c47;
+    --r-link-color-dark: #f26241;
+    --r-link-color-hover: #f26241;
+    --r-main-color: #f2e1c2;
+
+    --r-heading-font: 'Patua One', cursive;
+    --r-heading-text-transform: none;
+    --r-main-font: 'Georama', sans-serif;
+}
+
+em {
+    color: var(--r-hilight-color);
+}
+
+#author {
+    font-style: italic;
+}
+
