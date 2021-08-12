@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="dist/reset.css">
         <link rel="stylesheet" href="dist/reveal.css">
         <link rel="stylesheet" href="dist/theme/serif.css" id="theme">
-        <link rel="stylesheet" href="plugin/highlight/zenburn.css" id="highlight-theme">
+        <link rel="stylesheet" href="plugin/highlight/solarized-light.css" id="highlight-theme">
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap">
         <link rel="stylesheet" href="dist/screen.css">
@@ -23,18 +23,6 @@
                     <p><small><em>by Andrew Fricke</em></small></p>
                 </section>
 
-                <!--
-                - agenda
-                - container vs vms
-                - overview diagram
-                - terminology
-                - OCI
-                - security
-                - use cases (good and bad)
-                - best practices
-                - brief cloud overview
-                -->
-
                 <section>
                     <h2><span class="lowlight">My <span class="highlight">goal</span> is to</span> demystify containers <span class="lowlight">and related technologies</span></h2>
                 </section>
@@ -44,21 +32,9 @@
                     <ul>
                         <li class="fragment">What <span class="lowlight">are containers</span></li>
                         <li class="fragment">How <span class="lowlight">to use them</span></li>
-                        <li class="fragment">&hellip;</li>
-                        <li class="fragment"><em>What <span class="lowlight">is the cloud</span></em></li>
+                        <li class="fragment"><span class="lowlight">The</span> OCI <span class="lowlight">(a world beyond Docker)</span></li>
                     </ul>
                 </section>
-
-                <section>
-                    <h2><em>Wait, <span class="lowlight">the cloud</span>?</em></h2>
-                    <p><img width="75%" height="75%" src="dist/images/the_internet.gif"></p>
-                </section>
-
-                <!--
-                <section>
-                    <h2></h2>
-                </section>
-                -->
 
                 <section>
                     <h2 class="highlight">What is a container?</h2>
@@ -70,7 +46,7 @@
                     <ul>
                         <li class="fragment">Hardware: <span class="lowlight">Hyper-V, KVM, VMWare ESXi</span></li>
                         <li class="fragment">Operating system<span class="highlight">*</span>: <span class="lowlight">FreeBSD jail, LXC</span></li>
-                        <li class="fragment">Application<span class="highlight">*</span>: <span class="lowlight">Docker, rkt</span></li>
+                        <li class="fragment">Application<span class="highlight">*</span>: <span class="lowlight">Docker, Podman</span></li>
                     </ul>
                     <p class="fragment lowlight"><em><span class="highlight">*</span>(&ldquo;container&rdquo; usually means one of these)</em></p>
                 </section>
@@ -109,7 +85,7 @@
                 <section>
                     <h2 class="highlight">Tag</h2>
                     <h3>(a label for a specific layer that is meant to be used)</h3>
-                    <p class="fragment lowlight">(like a Git <span class="highlight">tag</span>)</p>
+                    <p class="fragment lowlight">(like a Git <span class="highlight">tag</span> or a VM <span class="highlight">snapshot</span>)</p>
                 </section>
 
                 <section>
@@ -125,18 +101,221 @@
                 </section>
 
                 <section>
-                    <h2 class="highlight">Container engine</h2>
-                    <h3>(operating system-level virtualization)</h3>
+                    <h2 class="highlight">Putting it all together</h2>
+                    <pre class="fragment docker"><code class="hljs" data-trim>
+                        # (filesystem) base image
+                        FROM nginx
+
+                        # (metadata) change the working directory
+                        WORKDIR /usr/share/nginx/html
+
+                        # (filesystem) add a file
+                        COPY index.html /usr/share/nginx/html
+
+                        # (metadata) configure command run when started
+                        CMD nginx -g 'daemon off;'
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ docker pull nginx
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ docker build -t website_static:latest .
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ docker run -p 8080:80 website_static:latest
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Security concerns</h2>
+                    <ul>
+                        <li class="fragment">Running privileged containers</li>
+                        <li class="fragment">Insecure images</li>
+                        <li class="fragment">Leaking secrets</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="highlight">When to use containers?</h2>
+                    <ul>
+                        <li class="fragment">Consistency</li>
+                        <li class="fragment">Deployment</li>
+                        <li class="fragment">Scalability</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="highlight">When <em>not</em> to use containers?</h2>
+                    <ul>
+                        <li class="fragment">Performance</li>
+                        <li class="fragment">Security <span class="lowlight"><em>(though improving)</em></span></li>
+                        <li class="fragment">State</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Best practices</h2>
+                    <ul>
+                        <li class="fragment">One image per application</li>
+                        <li class="fragment">Optimize for the build cache</li>
+                        <li class="fragment">Minimize image size</li>
+                        <li class="fragment">Keep state out of images</li>
+                        <li class="fragment">Avoid running privileged containers as root</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Open Container Initiative (OCI)</h2>
+                    <h3>(container format and runtime standards)</h3>
+                    <p class="fragment lowlight">(enables compatibility between multiple container engines and runtimes)</p>
                 </section>
 
                 <section>
                     <h2 class="highlight">Container runtime</h2>
-                    <h3>(operating system-level virtualization)</h3>
+                    <h3>(creates and manages containers)</h3>
+                    <p class="fragment lowlight">(the low-level container interface)</p>
                 </section>
 
                 <section>
-                    <h2 class="highlight">Container orchestration</h2>
-                    <h3>(operating system-level virtualization)</h3>
+                    <h2 class="highlight">Container runtime</h2>
+                    <ul>
+                        <li class="fragment">runc: Docker's effort (libcontainer)</li>
+                        <li class="fragment">crun: Red Hat's effort (libpod)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="highlight">runc</h2>
+                    <ul>
+                        <li class="fragment">Written in Go</li>
+                        <li class="fragment">Reference implementation</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="highlight">runc example</h2>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ chroot ./nginx-rootfs /bin/sh
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ # create default container specification
+                        $ runc spec
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ # create and start the container
+                        $ runc run website_static
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="highlight">crun</h2>
+                    <ul>
+                        <li class="fragment">Written in C</li>
+                        <li class="fragment">Smaller, faster, uses less memory</li>
+                        <li class="fragment">Able to experiment (cgroups v2)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="highlight">crun example</h2>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ # create default container specification
+                        $ crun spec
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ # create and start the container
+                        $ crun run website_static
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Container engine</h2>
+                    <h3>(interprets and executes commands)</h3>
+                    <p class="fragment lowlight">(the high-level container interface)</p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Container engine</h2>
+                    <ul>
+                        <li class="fragment">docker: Docker's effort (libcontainer)</li>
+                        <li class="fragment">podman: Red Hat's effort (libpod)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Compatibility</h2>
+                    <h3>(why the OCI is awesome)</h3>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ alias docker=podman
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Previous example</h2>
+                    <pre class="fragment docker"><code class="hljs" data-trim>
+                        FROM nginx
+                        WORKDIR /usr/share/nginx/html
+                        COPY index.html /usr/share/nginx/html
+                        CMD nginx -g 'daemon off;'
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ docker pull nginx
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ docker build -t website_static:latest .
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ docker run -p 8080:80 website_static:latest
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Using Podman</h2>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ podman pull nginx
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ podman build -t website_static:latest .
+                    </code></pre>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ podman run -p 8080:80 website_static:latest
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="highlight">Using Buildah</h2>
+                    <pre class="fragment shell"><code class="hljs" data-trim>
+                        $ # create container from base image
+                        $ CONTAINER="$(buildah from nginx)"
+
+                        $ # copy index to the container's root filesystem
+                        $ MOUNT="$(buildah mount "$CONTAINER")"
+                        $ cp index.html "${MOUNT}/usr/share/nginx/html"
+                        $ buildah unmount "$CONTAINER"
+
+                        $ # configure the image
+                        $ buildah config --cmd "nginx -g 'daemon off;'" "$CONTAINER"
+                        $ buildah config --workingdir /usr/share/nginx/html "$CONTAINER"
+
+                        $ # create image and delete working container
+                        $ buildah commit --rm "$CONTAINER" website_static:latest
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2 class="highlight">But why?</h2>
+                    <p><img width="75%" height="75%" src="dist/images/but_why.gif"></p>
+                </section>
+
+                <section>
+                    <h2 class="highlight">But why?</h2>
+                    <ul>
+                        <li class="fragment">Rootless</li>
+                        <li class="fragment">Daemonless</li>
+                        <li class="fragment">Pod support</li>
+                        <li class="fragment">Direct access to root filesystem</li>
+                        <li class="fragment">More control over layers</li>
+                    </ul>
                 </section>
 
                 <section>
