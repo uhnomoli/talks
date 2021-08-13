@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,400;0,700;1,400;1,700&family=Patua+One&display=swap">
+
+        <link rel="stylesheet" href="dist/reset.css">
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/solarized.css">
+        <link rel="stylesheet" href="plugin/highlight/solarized-dark.css">
+
+        <link rel="stylesheet" href="dist/screen.css">
+
+        <title>CI/CD (automate all the things)</title>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-background-image="/images/gears.jpeg" data-background-opacity="0.25">
+                    <h1>CI/CD</h1>
+                    <h2>(automate all the things)</h2>
+                    <p id="author">by Andrew Fricke</p>
+                </section>
+
+                <section>
+                    <h2>Agenda</h2>
+                    <ul>
+                        <li class="fragment">What is <em>CI/CD</em></li>
+                        <li class="fragment">The <em>possibilities</em></li>
+                        <li class="fragment">The <em>benefits</em></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>What is CI/CD?</h2>
+                    <dl class="fragment">
+                        <dt><strong>C</strong>ontinuous <strong>I</strong>ntegration:</dt>
+                        <dd>Changes are regularly built, tested, and merged.</dd>
+                    </dl>
+
+                    <dl class="fragment">
+                        <dt><strong>C</strong>ontinuous <strong>D</strong>elivery:</dt>
+                        <dd>Changes are automatically packaged and uploaded (e.g. to a repository or container registry).</dd>
+                    </dl>
+
+                    <dl class="fragment">
+                        <dt><strong>C</strong>ontinuous <strong>D</strong>eployment:</dt>
+                        <dd>Changes are automatically released to production.</dd>
+                    </dl>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ## What's possible?
+
+                        With <strong>GitLab</strong>
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ## What's possible?
+
+                        Compiling a program?
+
+                        ```yml [1|3|4|5-6|7-9]
+                        image: gcc
+
+                        compile-program:
+                            stage: build
+                            script:
+                                - gcc hello_world.c -o hello_world
+                            artifacts:
+                                paths:
+                                    - hello_world
+                        ```
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ## What's possible?
+
+                        Testing a program?
+
+                        ```yml [11-14]
+                        image: gcc
+
+                        compile-program:
+                            stage: build
+                            script:
+                                - gcc hello_world.c -o hello_world
+                            artifacts:
+                                paths:
+                                    - hello_world
+
+                        test-program:
+                            stage: test
+                            script:
+                                - ./hello_world_tests.sh
+                        ```
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ## What's possible?
+
+                        Building a container?
+
+                        ```yml [4-5|6-8]
+                        build-container:
+                            image: docker
+                            stage: build
+                            services:
+                                - docker:dind
+                            script:
+                                - docker build -t "$CI_REGISTRY_IMAGE" .
+                                - docker push "$CI_REGISTRY_IMAGE"
+                        ```
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ## What's possible?
+
+                        Generating documentation?
+
+                        ```yml [6-8]
+                        build-documentation:
+                            image: pandoc/latex
+                            stage: build
+                            script:
+                                - pandoc README.md -o README.pdf
+                            only:
+                                changes:
+                                    - README.md
+                            artifacts:
+                                paths:
+                                    - README.pdf
+                        ```
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ## What's possible?
+
+                        Managing infrastructure?
+
+                        ```yml
+                        image: hashicorp/terraform
+                        before_script:
+                            - terraform init
+                        plan:
+                            stage: plan
+                            script:
+                                - terraform plan -out 'planfile'
+                            artifacts:
+                                paths:
+                                    - planfile
+                        apply:
+                            stage: apply
+                            script:
+                                - terraform apply -input=false 'planfile'
+                            when: manual
+                        ```
+                    </textarea>
+                </section>
+
+                <section>
+                    <h2>What's possible?</h2>
+                    <ul>
+                        <li class="fragment"><em>Formatting/linting</em>: enforce style</li>
+                        <li class="fragment"><em>Scanning</em>: check for vulernabilities, data leakage</li>
+                        <li class="fragment"><em>Conditions</em>: branches, merges, custom variables</li>
+                        <li class="fragment"><em>Dependencies</em>: stopping pipelines when needed</li>
+                    </ul>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ## The benefits
+
+                        ![works-on-my-machine](/images/works_on_my_machine.jpeg)
+                    </textarea>
+                </section>
+
+                <section>
+                    <h2>The benefits</h2>
+                    <ul>
+                        <li class="fragment">
+                            <em>Portability</em>:
+                            <ul>
+                                <li>reproducable builds</li>
+                                <li>managed dependencies</li>
+                            </ul>
+                        </li>
+                        <li class="fragment"><em>Efficiency</em>: automate common tasks</li>
+                        <li class="fragment"><em>Focus on code</em>: not processes</li>
+                        <li class="fragment">
+                            <em>Security</em>:
+                            <ul>
+                                <li>catch vulernabilities and data leaks</li>
+                                <li>reduce need for elevated permissions</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ## Questions?
+                    </textarea>
+                </section>
+            </div>
+        </div>
+
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
+        <script>
+            Reveal.initialize({
+                hash: true,
+                plugins: [
+                    RevealMarkdown,
+                    RevealHighlight,
+                    RevealNotes],
+                transition: 'none'});
+        </script>
+    </body>
+</html>
