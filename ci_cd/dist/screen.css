@@ -12,11 +12,24 @@
     --r-main-font: 'Georama', sans-serif;
 }
 
-em {
+.reveal dl + dl {
+    margin-top: .5em;
+}
+
+em,
+strong {
     color: var(--r-hilight-color);
+}
+
+img {
+    border: 5px solid var(--r-hilight-color);
 }
 
 #author {
     font-style: italic;
+}
+
+.reveal dl {
+    display: block;
 }
 
