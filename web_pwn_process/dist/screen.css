@@ -1,0 +1,48 @@
+:root {
+    --r-code-font: 'Courier Prime', monospace;
+    --r-heading-font: 'Courier Prime', monospace;
+    --r-heading-font-weight: bold;
+    --r-main-font: 'Courier Prime', monospace;
+}
+
+.lowlight {
+    color: #717171 !important;
+}
+
+/*
+:root {
+    --r-background-color: #00323f;
+    --r-heading-color: #00706c;
+    --r-hilight-color: #f26241;
+    --r-link-color: #f58c47;
+    --r-link-color-dark: #f26241;
+    --r-link-color-hover: #f26241;
+    --r-main-color: #f2e1c2;
+
+    --r-heading-font: 'Patua One', cursive;
+    --r-heading-text-transform: none;
+    --r-main-font: 'Georama', sans-serif;
+}
+
+.reveal dl + dl {
+    margin-top: .5em;
+}
+
+em,
+strong {
+    color: var(--r-hilight-color);
+}
+
+img {
+    border: 5px solid var(--r-hilight-color);
+}
+
+#author {
+    font-style: italic;
+}
+
+.reveal dl {
+    display: block;
+}
+*/
+

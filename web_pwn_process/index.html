@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/theme/dracula.css">
+    <link rel="stylesheet" href="plugin/highlight/tokyo-night-dark.css">
+
+    <link rel="stylesheet" href="dist/screen.css">
+
+    <title>web pwn (a process)</title>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section data-background-image="images/gears.jpeg" data-background-opacity="0.25">
+                <h1>web pwn</h1>
+                <h2>(a process)</h2>
+                <p id="author">by Andrew Fricke</p>
+            </section>
+
+            <section>
+                <h2>Agenda</h2>
+                <ul>
+                    <li class="fragment">Talking<br>&nbsp;<strong>⤿</strong> <span class="lowlight">(these slides)</span></li>
+                    <li class="fragment">Demonstration<br>&nbsp;<strong>⤿</strong> <span class="lowlight">(retired HTB challenges)</span></li>
+                    <li class="fragment">Application<br>&nbsp;<strong>⤿</strong> <span class="lowlight">(active HTB challenges)</span></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>The Process</h2>
+                <ol>
+                    <li class="fragment">
+                        Identify goal
+
+                        <ul class="fragment">
+                            <li>The what<br>&nbsp;<strong>⤿</strong> <span class="lowlight">(flag or access)</span></li>
+                        </ul>
+                    </li>
+
+                    <li class="fragment">
+                        Identify attack vector
+
+                        <ul class="fragment">
+                            <li>The who<br>&nbsp;<strong>⤿</strong> <span class="lowlight">(server or person)</span></li>
+                        </ul>
+                    </li>
+
+                    <li class="fragment">
+                        Enumerate
+
+                        <ul class="fragment">
+                            <li>The how<br>&nbsp;<strong>⤿</strong> <span class="lowlight">(find the bug)</span></li>
+                        </ul>
+                    </li>
+
+                    <li class="fragment">
+                        Exploit
+
+                        <ul class="fragment">
+                            <li>The why<br>&nbsp;<strong>⤿</strong> <span class="lowlight">(be 1337 hacker man)</span></li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+
+            <section>
+                <h2>The goal</h2>
+                <ul>
+                    <li class="fragment">
+                        CTF
+
+                        <ul class="fragment">
+                            <li><code>SCENARIO:</code> A flag<span class="fragment"><br>&nbsp;<strong>⤿</strong> Where is it<br>&nbsp;<strong>⤿</strong> <span class="lowlight">(cookie, env, file)</span></span></li>
+                        </ul>
+                    </li>
+
+                    <li class="fragment">
+                        HTB / OffSec
+
+                        <ul class="fragment">
+                            <li><code>SCENARIO:</code> Access<span class="fragment"><br>&nbsp;<strong>⤿</strong> To what<br>&nbsp;<strong>⤿</strong> <span class="lowlight">(creds, rce)</span></span></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <aside class="notes">
+                    <ul>
+                        <li>
+                            What we're trying to accomplish often dictates vulnerability and can drastically narrow our search
+
+                            <ul>
+                                <li>Steal a cookie =&gt; xss</li>
+                                <li>Read a file =&gt; lfi, rce</li>
+                                <li>Steal creds =&gt; lfi, sqli</li>
+                            </ul>
+                        <li>Flag: do we know it's location (e.g. Dockerfile, source, description, etc.)</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section>
+                <h2>The attack vector</h2>
+                <ul>
+                    <li class="fragment">
+                        Person <span class="lowlight">(interactive)</span>
+
+                        <ul>
+                            <li class="fragment">Pretty much always <code>xss</code></li>
+                            <li class="fragment">Maybe <code>cron job</code></li>
+                            <li class="fragment">Maybe <code>phishing</code></li>
+                        </ul>
+                    </li>
+
+                    <li class="fragment">
+                        Server <span class="lowlight">(non-interactive)</span>
+
+                        <ul>
+                            <li class="fragment">Everything else</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Enumerate</h2>
+                <ul>
+                    <li class="fragment">The <code>hard</code> part<span class="fragment"><br>&nbsp;<strong>⤿</strong> <span class="lowlight">(easier after previous steps)</span></span><span class="fragment"><br>&nbsp;<strong>⤿</strong> <span class="lowlight">(and experience)</span></span></li>
+                    <li class="fragment">Remember the <code>goal</code></li>
+                    <li class="fragment">Identify technology stack<span class="fragment"><br>&nbsp;<strong>⤿</strong> <span class="lowlight">(static or dynamic)</span></span></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Exploit</h2>
+                <ul>
+                    <li class="fragment">Maybe the <code>hardest</code> part</li>
+                    <li class="fragment">Don't forget the <code>dumb</code> things<br>&nbsp;<strong>⤿</strong> <span class="lowlight">(e.g. common creds)</span></li>
+                    <li class="fragment">It's <code>probably</code> on HackTricks</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Tools</h2>
+                <ul>
+                    <li class="fragment">
+                        Data manipulation
+
+                        <ul>
+                            <li class="fragment"><a href="https://gchq.github.io/CyberChef/">CyberChef</a><br>&nbsp;<strong>⤿</strong> gchq.github.io/CyberChef/</li>
+                            <li class="fragment"><a href="https://jwt.io">jwt.io</a><br>&nbsp;<strong>⤿</strong> jwt.io</li>
+                        </ul>
+                    </li>
+
+                    <li class="fragment">
+                        Dictionaries
+
+                        <ul>
+                            <li class="fragment"><a href="https://github.com/danielmiessler/SecLists">SecLists</a><br>&nbsp;<strong>⤿</strong> danielmiessler/SecLists <span class="lowlight">(gh)</span></li>
+                            <li class="fragment"><a href="https://github.com/the-xentropy/samlists">samlists</a><br>&nbsp;<strong>⤿</strong> the-xentropy/samlists <span class="lowlight">(gh)</span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Tools</h2>
+                <ul>
+                    <li class="fragment">
+                        Endpoints
+
+                        <ul>
+                            <li class="fragment"><a href="https://pipedream.com/requestbin">RequestBin</a><br>&nbsp;<strong>⤿</strong> pipedream.com/requestbin</li>
+                            <li class="fragment"><a href="https://messwithdns.net">mess with dns</a><br>&nbsp;<strong>⤿</strong> messwithdns.net</li>
+                            <li class="fragment"><a href="https://ngrok.com">ngrok</a><br>&nbsp;<strong>⤿</strong> ngrok.com</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Tools</h2>
+                <ul>
+                    <li class="fragment">
+                        Enumeration
+
+                        <ul>
+                            <li class="fragment">
+                                *buster
+
+                                <ul>
+                                    <li class="fragment">feroxbuster <span class="lowlight">(directories/files)</span></li>
+                                    <li class="fragment">gobuster <span class="lowlight">(dns/vhost)</span></li>
+                                </ul>
+                            </li>
+
+                            <li class="fragment">patator</li>
+                            <li class="fragment">sqlmap</li>
+                            <li class="fragment">wpscan</li>
+                            <li class="fragment">zap</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Tools</h2>
+                <ul>
+                    <li class="fragment">
+                        Payloads
+
+                        <ul>
+                            <li class="fragment"><a href="https://swisskyrepo.github.io/PayloadsAllTheThings/">PayloadsAllTheThings</a></li>
+                            <li class="fragment"><a href="https://swisskyrepo.github.io/InternalAllTheThings/">InternalAllTheThings</a></li>
+                            <li class="fragment"><a href="https://gtfobins.github.io">GTFOBins</a><br>&nbsp;<strong>⤿</strong> gtfobins.github.io</li>
+                            <li class="fragment"><a href="https://lolbas-project.github.io">LOLBAS</a><br>&nbsp;<strong>⤿</strong> lolbas-project.github.io</li>
+                            <li class="fragment"><a href="https://wadcoms.github.io">WADComs</a><br>&nbsp;<strong>⤿</strong> wadcoms.github.io</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Questions?</h2>
+            </section>
+        </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+        });
+    </script>
+</body>
+</html>
+
